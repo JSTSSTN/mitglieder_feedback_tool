@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ON STAGE Training Center – Feedback</title>
-
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -85,7 +84,6 @@
   }
 </style>
 </head>
-
 <body>
 <div class="container">
 
@@ -105,8 +103,7 @@
 
   <button onclick="startFeedback()">Weiter</button>
 
-  <form id="feedbackForm" style="display:none; margin-top: 20px;">
-  </form>
+  <form id="feedbackForm" style="display:none; margin-top: 20px;"></form>
 
   <button id="submitBtn" onclick="submitFeedback()">Feedback abschicken</button>
 
@@ -123,7 +120,7 @@
     "Wie gut kommst du mit dem Unterrichtstempo klar?",
     "Wie hilfreich ist das Feedback der Trainer*innen?",
     "Wie zufrieden bist du mit den angebotenen Nahrungsergänzungsmitteln?",
-    "Wie zufrieden bist du mit der Sauberkeit der Trainingsfläche/Kursräume?",
+    "Wie zufrieden bist du mit der Sauberkeit der Trainingsfläche/Kursräumen?",
     "Wie wahrscheinlich empfiehlst du uns weiter?"
   ];
 
@@ -145,7 +142,6 @@
 
     questions.forEach((q, index) => {
       const qNum = index + 1;
-
       const questionHTML = document.createElement("div");
       questionHTML.classList.add("question");
       questionHTML.textContent = `${qNum}. ${q}`;
@@ -182,7 +178,6 @@
 
   function selectStars(questionIndex, value) {
     selectedRatings[questionIndex] = value;
-
     const stars = document.querySelectorAll(`.star[data-question='${questionIndex}']`);
     stars.forEach((star, idx) => {
       star.classList.toggle("selected", idx < value);
@@ -191,7 +186,6 @@
   }
 
   function submitFeedback() {
-    // Prüfen ob alle Fragen bewertet sind
     for (let i = 0; i < questions.length; i++) {
       if (!selectedRatings.hasOwnProperty(i)) {
         alert(`Bitte beantworte Frage ${i + 1} mit einer Bewertung.`);
@@ -199,43 +193,48 @@
       }
     }
 
-    // Google Sheets Payload bauen
-    const payload = [];
-
-    for (let i = 0; i < questions.length; i++) {
-      payload.push({
-        standort: selectedLocation,
-        frage: questions[i],
-        rating: ratingLabels[selectedRatings[i] - 1],
-        kommentar: document.getElementById(`comment-${i}`).value.trim()
-      });
-    }
-
-    // Daten an Google Sheets senden
-    fetch("https://script.google.com/macros/s/AKfycbyBi0RcrH5urJfFQeJbV6SwIBH1b5cAt2SKtVGVDFc3GcSfrWwk_0kByvvj7C0qPyhk/exec", {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
-    });
-
-    alert("Vielen Dank! Dein Feedback wurde gespeichert.");
-
-    // Ausgabe im Browser (optional)
-    let output = `<strong>Standort:</strong> ${selectedLocation}<br><br>`;
-    output += "<strong>Dein Feedback:</strong><br>";
+    const payload = {
+      standort: selectedLocation,
+      feedback: []
+    };
 
     for (let i = 0; i < questions.length; i++) {
       const rating = selectedRatings[i];
       const comment = document.getElementById(`comment-${i}`).value.trim();
-      output += `<p><b>${i + 1}. ${questions[i]}</b><br>`;
-      output += `Bewertung: <span style="color: gold;">${ratingLabels[rating - 1]}</span><br>`;
-      output += `Kommentar: ${comment ? comment : "<em>Kein Kommentar</em>"}</p>`;
+      payload.feedback.push({
+        frage: questions[i],
+        bewertung: ratingLabels[rating - 1],
+        kommentar: comment
+      });
     }
 
-    document.getElementById("result").innerHTML = output;
+    fetch("https://script.google.com/macros/s/AKfycbxpXkU6VgQaK6zLFqY6E54NyJt2ukX8c4ADBPd-4gytI4Avd5LadkIdypazm6QHhCIz2A/exec", {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      alert("Vielen Dank für dein Feedback!");
 
-    document.getElementById("feedbackForm").style.display = "none";
-    document.getElementById("submitBtn").style.display = "none";
+      let output = `<strong>Standort:</strong> ${selectedLocation}<br><br>`;
+      output += "<strong>Dein Feedback:</strong><br>";
+
+      for (let i = 0; i < questions.length; i++) {
+        const rating = selectedRatings[i];
+        const comment = document.getElementById(`comment-${i}`).value.trim();
+        output += `<p><b>${i + 1}. ${questions[i]}</b><br>`;
+        output += `Bewertung: <span style="color: gold;">${ratingLabels[rating - 1]}</span><br>`;
+        output += `Kommentar: ${comment ? comment : "<em>Kein Kommentar</em>"}</p>`;
+      }
+
+      document.getElementById("result").innerHTML = output;
+      document.getElementById("feedbackForm").style.display = "none";
+      document.getElementById("submitBtn").style.display = "none";
+    })
+    .catch((error) => {
+      console.error("Fehler beim Absenden des Feedbacks:", error);
+      alert("Beim Absenden des Feedbacks ist ein Fehler aufgetreten. Bitte versuche es später erneut.");
+    });
   }
 </script>
 </body>
