@@ -14,7 +14,10 @@
   button { cursor:pointer; background:#fff; color:#000; font-weight:bold; }
   .question { font-size:20px; margin-top:40px; margin-bottom:5px; text-align:left; }
   .stars { display:flex; gap:10px; margin-bottom:10px; }
-  .star { font-size:36px; cursor:pointer; color:#444; transition:0.2s; }
+  .star { 
+    font-size:36px; cursor:pointer; color:#444; transition:0.2s; 
+    display:inline-block; pointer-events:auto; user-select:none;
+  }
   .star.selected { color:gold; }
   textarea { width:100%; min-height:50px; background:#111; color:#fff; padding:8px; border-radius:5px; border:2px solid #444; margin-bottom:20px; }
   #submitBtn { margin-top:30px; display:none; }
@@ -37,7 +40,7 @@
     <option value="Conventstraße">Conventstraße</option>
   </select>
 
-  <button onclick="startFeedback()">Weiter</button>
+  <button id="continueBtn" onclick="startFeedback()">Weiter</button>
 
   <form id="feedbackForm" style="display:none; margin-top:20px;"></form>
 
@@ -67,18 +70,21 @@
   function startFeedback() {
     selectedLocation = document.getElementById("location").value;
     if (!selectedLocation) {
-      alert("Bitte einen Standort auswählen!");
+      alert("Bitte Standort auswählen!");
       return;
     }
 
+    // wichtig: Button komplett entfernen, verhindert Klick-Blocker
+    document.getElementById("continueBtn").remove();
+
     document.getElementById("location").disabled = true;
-    document.querySelector("button[onclick='startFeedback()']").style.display = "none";
 
     const form = document.getElementById("feedbackForm");
     form.style.display = "block";
     form.innerHTML = "";
 
     questions.forEach((questionText, index) => {
+
       // Frage
       const qDiv = document.createElement("div");
       qDiv.classList.add("question");
@@ -91,14 +97,12 @@
       starsDiv.id = `stars-${index}`;
       form.appendChild(starsDiv);
 
-      // Sterne erzeugen + Klick-Event
+      // Sterne erzeugen
       for (let s = 1; s <= 4; s++) {
         const star = document.createElement("span");
         star.classList.add("star");
         star.innerHTML = "★";
-
         star.addEventListener("click", () => selectStars(index, s));
-
         starsDiv.appendChild(star);
       }
 
@@ -114,8 +118,8 @@
 
   function selectStars(questionIndex, value) {
     selectedRatings[questionIndex] = value;
-    const stars = document.querySelectorAll(`#stars-${questionIndex} .star`);
 
+    const stars = document.querySelectorAll(`#stars-${questionIndex} .star`);
     stars.forEach((star, idx) => {
       star.classList.toggle("selected", idx < value);
     });
@@ -138,30 +142,28 @@
       }))
     };
 
-    fetch("https://script.google.com/macros/s/AKfycby5OQBOk6kW90G7fiX3GcifyoGHReYl-uGTnre90Qj1M_tKt0c1bCFjWvNp3w2FuZarMA/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbwm3g3sBf6-fAinh36fBBWfuLS65AdmjcA-0KW2KQXFXhUVru4YBFmp64U7_Ad2rz2cCQ/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     })
     .then(r => r.text())
     .then(reply => {
-      console.log("Antwort von GAS:", reply);
-
       if (!reply.includes("SUCCESS")) {
-        alert("⚠️ Fehler beim Speichern in Google Sheets:\n" + reply);
+        alert("Fehler beim Speichern:\n" + reply);
         return;
       }
 
       alert("Vielen Dank für dein Feedback!");
+
       document.getElementById("feedbackForm").style.display = "none";
       document.getElementById("submitBtn").style.display = "none";
-
       document.getElementById("result").innerHTML =
-        "<b>Feedback erfolgreich übermittelt!</b>";
+        "<b>Feedback erfolgreich gespeichert!</b>";
     })
     .catch(err => {
+      alert("VERBINDUNGSFEHLER!");
       console.error(err);
-      alert("FEHLER beim Senden!");
     });
   }
 </script>
