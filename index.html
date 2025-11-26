@@ -122,25 +122,24 @@
       });
     }
 
-    fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec", {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
-    }).then(()=>{
-      alert("Vielen Dank für dein Feedback!");
-      document.getElementById("feedbackForm").style.display="none";
-      document.getElementById("submitBtn").style.display="none";
-      
-      let output = `<strong>Standort:</strong> ${selectedLocation}<br><br><strong>Dein Feedback:</strong><br>`;
-      payload.feedback.forEach((f,i)=>{
-        output += `<p><b>${i+1}. ${f.frage}</b><br>Bewertung: <span style="color:gold;">${f.bewertung}</span><br>`;
-        output += `Kommentar: ${f.kommentar ? f.kommentar : "<em>Kein Kommentar</em>"}</p>`;
-      });
-      document.getElementById("result").innerHTML = output;
-    }).catch((err)=>{
-      console.error(err);
-      alert("Fehler beim Absenden des Feedbacks. Bitte später erneut versuchen.");
-    });
+  fetch("https://script.google.com/macros/s/AKfycbywN8JwFi0NWVfUlPcE7mOvM89Z6mDUdlJAJ6Y2Wzxg0iJwJ5Vvm2YE80GMgTCmmiZq2g/exec", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+})
+.then(response => response.text())
+.then(data => {
+  console.log("Antwort von GAS:", data);
+  alert("Vielen Dank für dein Feedback!");
+  document.getElementById("feedbackForm").style.display = "none";
+  document.getElementById("submitBtn").style.display = "none";
+})
+.catch(err => {
+  console.error("Fehler beim Absenden:", err);
+  alert("Fehler beim Absenden des Feedbacks. Bitte später erneut versuchen.");
+});
   }
 </script>
 </body>
