@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ON STAGE Training Center – Feedback</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  img.logo {
+    width: 200px;
+    margin: 20px auto;
+    display: block;
+  }
+  label, select, button {
+    font-size: 18px;
+  }
+  select, button {
+    padding: 12px;
+    width: 100%;
+    margin-top: 15px;
+    border: 2px solid #fff;
+    background: #111;
+    color: #fff;
+    border-radius: 5px;
+  }
+  button {
+    cursor: pointer;
+    background: #fff;
+    color: #000;
+    font-weight: bold;
+  }
+  .question {
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 5px;
+    text-align: left;
+  }
+  .stars {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .star {
+    font-size: 36px;
+    cursor: pointer;
+    color: #444;
+    transition: 0.2s;
+  }
+  .star.selected {
+    color: gold;
+  }
+  textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 50px;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid #444;
+    background: #111;
+    color: #fff;
+  }
+  #submitBtn {
+    margin-top: 30px;
+    display: none;
+  }
+  #result {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- LOGO -->
+<img class="logo" src="images/logo.png" alt="ON STAGE Logo">
+
+  <h2>Feedback – ON STAGE Training Center</h2>
+
+  <!-- Standort-Auswahl -->
+  <label for="location"><b>Bitte Standort auswählen</b></label>
+  <select id="location">
+    <option value="" disabled selected>Standort wählen</option>
+    <option value="Am Felde">Am Felde</option>
+    <option value="Krohnskamp">Krohnskamp</option>
+    <option value="Conventstraße">Conventstraße</option>
+  </select>
+
+  <button onclick="startFeedback()">Weiter</button>
+
+  <form id="feedbackForm" style="display:none; margin-top: 20px;">
+  </form>
+
+  <button id="submitBtn" onclick="submitFeedback()">Feedback abschicken</button>
+
+  <p id="result"></p>
+</div>
+
+<script>
+  const questions = [
+    "Wie zufrieden bist du mit dem Unterricht?",
+    "Wie kompetent wirkt dein Trainer?",
+    "Wie wohl fühlst du dich im Training?",
+    "Wie gut sind die Trainingsräume ausgestattet?",
+    "Wie gut sind die Trainingszeiten für dich?",
+    "Wie gut kommst du mit dem Unterrichtstempo klar?",
+    "Wie hilfreich ist das Feedback des Trainers?",
+    "Wie motiviert fühlst du dich nach dem Training?",
+    "Wie gut gefällt dir das Kursangebot?",
+    "Wie wahrscheinlich empfiehlst du uns weiter?"
+  ];
+
+  const ratingLabels = ["Sehr unzufrieden", "Unzufrieden", "Zufrieden", "Sehr zufrieden"];
+  let selectedLocation = "";
+
+  function startFeedback() {
+    selectedLocation = document.getElementById("location").value;
+    if (!selectedLocation) {
+      alert("Bitte einen Standort auswählen!");
+      return;
+    }
+    document.getElementById("location").disabled = true;
+    document.querySelector("button[onclick='startFeedback()']").style.display = "none";
+
+    const form = document.getElementById("feedbackForm");
+    form.style.display = "block";
+    form.innerHTML = "";
+
+    questions.forEach((q, index) => {
+      const qNum = index + 1;
+      const questionHTML = document.createElement("div");
+      questionHTML.classList.add("question");
+      questionHTML.textContent = `${qNum}. ${q}`;
+      form.appendChild(questionHTML);
+
+      const starsDiv = document.createElement("div");
+      starsDiv.classList.add("stars");
+
+      for (let i = 1; i <= 4; i++) {
+        const star = document.createElement("span");
+        star.classList.add("star");
+        star.innerHTML = "&#9733;";
+        star.dataset.question = index;
+        star.dataset.value = i;
+
+        star.addEventListener("click", () => {
+          selectStars(index, i);
+        });
+
+        starsDiv.appendChild(star);
+      }
+      form.appendChild(starsDiv);
+
+      const textArea = document.createElement("textarea");
+      textArea.placeholder = "Dein Kommentar...";
+      textArea.id = `comment-${index}`;
+      form.appendChild(textArea);
+    });
+
+    document.getElementById("submitBtn").style.display = "inline-block";
+  }
+
+  const selectedRatings = {};
+
+  function selectStars(questionIndex, value) {
+    selectedRatings[questionIndex] = value;
+    const stars = document.querySelectorAll(`.star[data-question='${questionIndex}']`);
+    stars.forEach((star, idx) => {
+      star.classList.toggle("selected", idx < value);
+      star.style.color = idx < value ? "gold" : "#444";
+    });
+  }
+
+  function submitFeedback() {
+    for (let i = 0; i < questions.length; i++) {
+      if (!selectedRatings.hasOwnProperty(i)) {
+        alert(`Bitte beantworte Frage ${i + 1} mit einer Bewertung.`);
+        return;
+      }
+    }
+
+    let output = `<strong>Standort:</strong> ${selectedLocation}<br><br>`;
+    output += "<strong>Dein Feedback:</strong><br>";
+
+    for (let i = 0; i < questions.length; i++) {
+      const rating = selectedRatings[i];
+      const comment = document.getElementById(`comment-${i}`).value.trim();
+      output += `<p><b>${i + 1}. ${questions[i]}</b><br>`;
+      output += `Bewertung: <span style="color: gold;">${ratingLabels[rating - 1]}</span><br>`;
+      output += `Kommentar: ${comment ? comment : "<em>Kein Kommentar</em>"}</p>`;
+    }
+
+    document.getElementById("result").innerHTML = output;
+    document.getElementById("feedbackForm").style.display = "none";
+    document.getElementById("submitBtn").style.display = "none";
+  }
+</script>
+</body>
+</html>
