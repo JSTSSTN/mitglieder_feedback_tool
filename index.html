@@ -5,94 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ON STAGE Training Center – Feedback</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #000;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
-  .container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  img.logo {
-    width: 200px;
-    margin: 20px auto;
-    display: block;
-  }
-  label, select, button {
-    font-size: 18px;
-  }
-  select, button {
-    padding: 12px;
-    width: 100%;
-    margin-top: 15px;
-    border: 2px solid #fff;
-    background: #111;
-    color: #fff;
-    border-radius: 5px;
-  }
-  button {
-    cursor: pointer;
-    background: #fff;
-    color: #000;
-    font-weight: bold;
-  }
-  .question {
-    font-size: 20px;
-    margin-top: 40px;
-    margin-bottom: 5px;
-    text-align: left;
-  }
-  .stars {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .star {
-    font-size: 36px;
-    cursor: pointer;
-    color: #444;
-    transition: 0.2s;
-  }
-  .star.selected {
-    color: gold;
-  }
-  textarea {
-    width: 100%;
-    resize: vertical;
-    min-height: 50px;
-    font-size: 16px;
-    padding: 8px;
-    border-radius: 5px;
-    border: 2px solid #444;
-    background: #111;
-    color: #fff;
-  }
-  #submitBtn {
-    margin-top: 30px;
-    display: none;
-  }
-  #result {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 30px;
-  }
+  body { font-family: Arial, sans-serif; background: #000; color: #fff; margin:0; padding:0; text-align:center; }
+  .container { max-width: 700px; margin:0 auto; padding:20px; }
+  img.logo { width:200px; margin:20px auto; display:block; }
+  label, select, button { font-size:18px; }
+  select, button { padding:12px; width:100%; margin-top:15px; border:2px solid #fff; background:#111; color:#fff; border-radius:5px; }
+  button { cursor:pointer; background:#fff; color:#000; font-weight:bold; }
+  .question { font-size:20px; margin-top:40px; margin-bottom:5px; text-align:left; }
+  .stars { display:flex; justify-content:flex-start; gap:10px; margin-bottom:10px; }
+  .star { font-size:36px; cursor:pointer; color:#444; transition:0.2s; }
+  .star.selected { color:gold; }
+  textarea { width:100%; resize:vertical; min-height:50px; font-size:16px; padding:8px; border-radius:5px; border:2px solid #444; background:#111; color:#fff; }
+  #submitBtn { margin-top:30px; display:none; }
+  #result { font-size:24px; font-weight:bold; margin-top:30px; text-align:left; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- LOGO -->
   <img class="logo" src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo.png" alt="ON STAGE Logo">
 
   <h2>Feedback – ON STAGE Training Center</h2>
 
-  <!-- Standort-Auswahl -->
   <label for="location"><b>Bitte Standort auswählen</b></label>
   <select id="location">
     <option value="" disabled selected>Standort wählen</option>
@@ -103,10 +37,8 @@
 
   <button onclick="startFeedback()">Weiter</button>
 
-  <form id="feedbackForm" style="display:none; margin-top: 20px;"></form>
-
+  <form id="feedbackForm" style="display:none; margin-top:20px;"></form>
   <button id="submitBtn" onclick="submitFeedback()">Feedback abschicken</button>
-
   <p id="result"></p>
 </div>
 
@@ -126,13 +58,12 @@
 
   const ratingLabels = ["Sehr unzufrieden", "Unzufrieden", "Zufrieden", "Sehr zufrieden"];
   let selectedLocation = "";
+  const selectedRatings = {};
 
   function startFeedback() {
     selectedLocation = document.getElementById("location").value;
-    if (!selectedLocation) {
-      alert("Bitte einen Standort auswählen!");
-      return;
-    }
+    if (!selectedLocation) { alert("Bitte einen Standort auswählen!"); return; }
+
     document.getElementById("location").disabled = true;
     document.querySelector("button[onclick='startFeedback()']").style.display = "none";
 
@@ -140,27 +71,21 @@
     form.style.display = "block";
     form.innerHTML = "";
 
-    questions.forEach((q, index) => {
-      const qNum = index + 1;
+    questions.forEach((q,index) => {
       const questionHTML = document.createElement("div");
       questionHTML.classList.add("question");
-      questionHTML.textContent = `${qNum}. ${q}`;
+      questionHTML.textContent = `${index+1}. ${q}`;
       form.appendChild(questionHTML);
 
       const starsDiv = document.createElement("div");
       starsDiv.classList.add("stars");
-
-      for (let i = 1; i <= 4; i++) {
+      for (let i=1;i<=4;i++) {
         const star = document.createElement("span");
         star.classList.add("star");
         star.innerHTML = "&#9733;";
         star.dataset.question = index;
         star.dataset.value = i;
-
-        star.addEventListener("click", () => {
-          selectStars(index, i);
-        });
-
+        star.addEventListener("click", ()=> selectStars(index,i));
         starsDiv.appendChild(star);
       }
       form.appendChild(starsDiv);
@@ -174,66 +99,47 @@
     document.getElementById("submitBtn").style.display = "inline-block";
   }
 
-  const selectedRatings = {};
-
   function selectStars(questionIndex, value) {
     selectedRatings[questionIndex] = value;
     const stars = document.querySelectorAll(`.star[data-question='${questionIndex}']`);
-    stars.forEach((star, idx) => {
-      star.classList.toggle("selected", idx < value);
-      star.style.color = idx < value ? "gold" : "#444";
-    });
+    stars.forEach((star, idx)=> star.classList.toggle("selected", idx<value));
   }
 
   function submitFeedback() {
-    for (let i = 0; i < questions.length; i++) {
+    for (let i=0;i<questions.length;i++) {
       if (!selectedRatings.hasOwnProperty(i)) {
-        alert(`Bitte beantworte Frage ${i + 1} mit einer Bewertung.`);
+        alert(`Bitte beantworte Frage ${i+1} mit einer Bewertung.`);
         return;
       }
     }
 
-    const payload = {
-      standort: selectedLocation,
-      feedback: []
-    };
-
-    for (let i = 0; i < questions.length; i++) {
-      const rating = selectedRatings[i];
-      const comment = document.getElementById(`comment-${i}`).value.trim();
+    const payload = { standort: selectedLocation, feedback: [] };
+    for (let i=0;i<questions.length;i++) {
       payload.feedback.push({
         frage: questions[i],
-        bewertung: ratingLabels[rating - 1],
-        kommentar: comment
+        bewertung: ratingLabels[selectedRatings[i]-1],
+        kommentar: document.getElementById(`comment-${i}`).value.trim()
       });
     }
 
-    fetch("https://script.google.com/macros/s/AKfycbxpXkU6VgQaK6zLFqY6E54NyJt2ukX8c4ADBPd-4gytI4Avd5LadkIdypazm6QHhCIz2A/exec", {
+    fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec", {
       method: "POST",
       mode: "no-cors",
       body: JSON.stringify(payload)
-    })
-    .then(() => {
+    }).then(()=>{
       alert("Vielen Dank für dein Feedback!");
-
-      let output = `<strong>Standort:</strong> ${selectedLocation}<br><br>`;
-      output += "<strong>Dein Feedback:</strong><br>";
-
-      for (let i = 0; i < questions.length; i++) {
-        const rating = selectedRatings[i];
-        const comment = document.getElementById(`comment-${i}`).value.trim();
-        output += `<p><b>${i + 1}. ${questions[i]}</b><br>`;
-        output += `Bewertung: <span style="color: gold;">${ratingLabels[rating - 1]}</span><br>`;
-        output += `Kommentar: ${comment ? comment : "<em>Kein Kommentar</em>"}</p>`;
-      }
-
+      document.getElementById("feedbackForm").style.display="none";
+      document.getElementById("submitBtn").style.display="none";
+      
+      let output = `<strong>Standort:</strong> ${selectedLocation}<br><br><strong>Dein Feedback:</strong><br>`;
+      payload.feedback.forEach((f,i)=>{
+        output += `<p><b>${i+1}. ${f.frage}</b><br>Bewertung: <span style="color:gold;">${f.bewertung}</span><br>`;
+        output += `Kommentar: ${f.kommentar ? f.kommentar : "<em>Kein Kommentar</em>"}</p>`;
+      });
       document.getElementById("result").innerHTML = output;
-      document.getElementById("feedbackForm").style.display = "none";
-      document.getElementById("submitBtn").style.display = "none";
-    })
-    .catch((error) => {
-      console.error("Fehler beim Absenden des Feedbacks:", error);
-      alert("Beim Absenden des Feedbacks ist ein Fehler aufgetreten. Bitte versuche es später erneut.");
+    }).catch((err)=>{
+      console.error(err);
+      alert("Fehler beim Absenden des Feedbacks. Bitte später erneut versuchen.");
     });
   }
 </script>
