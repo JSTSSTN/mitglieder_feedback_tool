@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ON STAGE Training Center – Feedback</title>
+
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -84,11 +85,12 @@
   }
 </style>
 </head>
+
 <body>
 <div class="container">
 
   <!-- LOGO -->
-<img class="logo" src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo.png" alt="ON STAGE Logo">
+  <img class="logo" src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo.png" alt="ON STAGE Logo">
 
   <h2>Feedback – ON STAGE Training Center</h2>
 
@@ -121,7 +123,7 @@
     "Wie gut kommst du mit dem Unterrichtstempo klar?",
     "Wie hilfreich ist das Feedback der Trainer*innen?",
     "Wie zufrieden bist du mit den angebotenen Nahrungsergänzungsmitteln?",
-    "Wie zufrieden bist du mit der sauberkeit der Trainingsfläche/Kursräumen?",
+    "Wie zufrieden bist du mit der Sauberkeit der Trainingsfläche/Kursräume?",
     "Wie wahrscheinlich empfiehlst du uns weiter?"
   ];
 
@@ -143,6 +145,7 @@
 
     questions.forEach((q, index) => {
       const qNum = index + 1;
+
       const questionHTML = document.createElement("div");
       questionHTML.classList.add("question");
       questionHTML.textContent = `${qNum}. ${q}`;
@@ -179,6 +182,7 @@
 
   function selectStars(questionIndex, value) {
     selectedRatings[questionIndex] = value;
+
     const stars = document.querySelectorAll(`.star[data-question='${questionIndex}']`);
     stars.forEach((star, idx) => {
       star.classList.toggle("selected", idx < value);
@@ -187,6 +191,7 @@
   }
 
   function submitFeedback() {
+    // Prüfen ob alle Fragen bewertet sind
     for (let i = 0; i < questions.length; i++) {
       if (!selectedRatings.hasOwnProperty(i)) {
         alert(`Bitte beantworte Frage ${i + 1} mit einer Bewertung.`);
@@ -194,6 +199,28 @@
       }
     }
 
+    // Google Sheets Payload bauen
+    const payload = [];
+
+    for (let i = 0; i < questions.length; i++) {
+      payload.push({
+        standort: selectedLocation,
+        frage: questions[i],
+        rating: ratingLabels[selectedRatings[i] - 1],
+        kommentar: document.getElementById(`comment-${i}`).value.trim()
+      });
+    }
+
+    // Daten an Google Sheets senden
+    fetch("https://script.google.com/macros/s/AKfycbyBi0RcrH5urJfFQeJbV6SwIBH1b5cAt2SKtVGVDFc3GcSfrWwk_0kByvvj7C0qPyhk/exec", {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(payload)
+    });
+
+    alert("Vielen Dank! Dein Feedback wurde gespeichert.");
+
+    // Ausgabe im Browser (optional)
     let output = `<strong>Standort:</strong> ${selectedLocation}<br><br>`;
     output += "<strong>Dein Feedback:</strong><br>";
 
@@ -206,6 +233,7 @@
     }
 
     document.getElementById("result").innerHTML = output;
+
     document.getElementById("feedbackForm").style.display = "none";
     document.getElementById("submitBtn").style.display = "none";
   }
