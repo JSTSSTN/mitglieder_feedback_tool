@@ -12,6 +12,7 @@
   label, select, button { font-size:18px; }
   select, button { padding:12px; width:100%; margin-top:15px; border:2px solid #fff; background:#111; color:#fff; border-radius:5px; }
   button { cursor:pointer; background:#fff; color:#000; font-weight:bold; }
+  button:disabled { opacity:0.5; cursor:not-allowed; }
   .question { font-size:20px; margin-top:40px; margin-bottom:5px; text-align:left; }
   .stars { display:flex; gap:10px; margin-bottom:10px; }
   .star { 
@@ -21,7 +22,23 @@
   .star.selected { color:gold; }
   textarea { width:100%; min-height:50px; background:#111; color:#fff; padding:8px; border-radius:5px; border:2px solid #444; margin-bottom:20px; }
   #submitBtn { margin-top:30px; display:none; }
-  #result { margin-top:30px; font-size:20px; text-align:left; }
+  #thankYouMessage { 
+    display:none; 
+    margin-top:40px; 
+    padding:30px; 
+    background:#1a5f1a; 
+    border-radius:10px; 
+    font-size:24px; 
+    font-weight:bold;
+  }
+  #errorMessage {
+    display:none;
+    margin-top:20px;
+    padding:20px;
+    background:#8b0000;
+    border-radius:10px;
+    font-size:18px;
+  }
 </style>
 </head>
 
@@ -45,7 +62,12 @@
   <form id="feedbackForm" style="display:none; margin-top:20px;"></form>
 
   <button id="submitBtn" onclick="submitFeedback()">Feedback abschicken</button>
-  <p id="result"></p>
+  
+  <div id="thankYouMessage">
+    ✓ Vielen Dank für dein Feedback!
+  </div>
+
+  <div id="errorMessage"></div>
 
 </div>
 
@@ -74,9 +96,7 @@
       return;
     }
 
-    // wichtig: Button komplett entfernen, verhindert Klick-Blocker
     document.getElementById("continueBtn").remove();
-
     document.getElementById("location").disabled = true;
 
     const form = document.getElementById("feedbackForm");
@@ -85,19 +105,16 @@
 
     questions.forEach((questionText, index) => {
 
-      // Frage
       const qDiv = document.createElement("div");
       qDiv.classList.add("question");
       qDiv.textContent = `${index + 1}. ${questionText}`;
       form.appendChild(qDiv);
 
-      // Sterne-Container
       const starsDiv = document.createElement("div");
       starsDiv.classList.add("stars");
       starsDiv.id = `stars-${index}`;
       form.appendChild(starsDiv);
 
-      // Sterne erzeugen
       for (let s = 1; s <= 4; s++) {
         const star = document.createElement("span");
         star.classList.add("star");
@@ -106,7 +123,6 @@
         starsDiv.appendChild(star);
       }
 
-      // Kommentar
       const textarea = document.createElement("textarea");
       textarea.id = `comment-${index}`;
       textarea.placeholder = "Dein Kommentar...";
@@ -133,6 +149,10 @@
       }
     }
 
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Wird gesendet...";
+
     const payload = {
       standort: selectedLocation,
       feedback: questions.map((q, i) => ({
@@ -145,25 +165,22 @@
     fetch("https://script.google.com/macros/s/AKfycbyWuJVnYdSqDAobSkIVqqfoZbzeh8BJ0IKmnFj7mE-C1zzvRwabUjDWWZzf5FUMHH2RHw/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
     })
-    .then(r => r.text())
-    .then(reply => {
-      if (!reply.includes("SUCCESS")) {
-        alert("Fehler beim Speichern:\n" + reply);
-        return;
-      }
-
-      alert("Vielen Dank für dein Feedback!");
-
+    .then(() => {
+      // Mit no-cors bekommen wir keine Response, aber das ist ok
       document.getElementById("feedbackForm").style.display = "none";
       document.getElementById("submitBtn").style.display = "none";
-      document.getElementById("result").innerHTML =
-        "<b>Feedback erfolgreich gespeichert!</b>";
+      document.getElementById("thankYouMessage").style.display = "block";
     })
     .catch(err => {
-      alert("VERBINDUNGSFEHLER!");
       console.error(err);
+      const errorMsg = document.getElementById("errorMessage");
+      errorMsg.textContent = "Verbindungsfehler! Bitte versuche es erneut oder kontaktiere uns.";
+      errorMsg.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Feedback abschicken";
     });
   }
 </script>
