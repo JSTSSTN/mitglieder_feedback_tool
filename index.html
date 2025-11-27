@@ -162,14 +162,14 @@
       }))
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbzPH3jLB37S7AaJMeJRun6RHN9gwZZHlQYE3rts7DlY4jLFntrJhaflatfAWQUx6rUgpg/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbxh9h8UmY1SBPlNia8q_KYAzanqQxUc_4vKMiJsx5jGopFm1RxC4B0FNZlR_Rpy7OJgEg/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
       mode: 'no-cors'
     })
     .then(() => {
-      // Mit no-cors bekommen wir keine Response, aber das ist ok
+      
       document.getElementById("feedbackForm").style.display = "none";
       document.getElementById("submitBtn").style.display = "none";
       document.getElementById("thankYouMessage").style.display = "block";
