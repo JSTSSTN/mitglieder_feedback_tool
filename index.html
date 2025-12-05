@@ -6,90 +6,189 @@
 <title>ON STAGE Training Center – Feedback</title>
 
 <style>
-  body { 
-    font-family: Arial, sans-serif; 
-    background: linear-gradient(135deg, #e91e8c 0%, #9b4dca 50%, #4a90e2 100%); 
-    color:#fff; 
-    margin:0; 
-    padding:0; 
-    text-align:center; 
-    min-height:100vh;
-  }
-  body.kids-mode { 
-    background: linear-gradient(135deg, #e91e8c 0%, #9b4dca 50%, #4a90e2 100%); 
-    color:#fff; 
-  }
-  .container { max-width:700px; margin:0 auto; padding:20px; }
-  
-  /* Logo Selection Page */
-  .logo-selection { display:flex; gap:30px; justify-content:center; align-items:center; margin:40px 0; flex-wrap:wrap; }
-  .logo-option { cursor:pointer; transition:transform 0.3s, opacity 0.3s; }
-  .logo-option:hover { transform:scale(1.1); opacity:0.8; }
-  .logo-option img { width:250px; border:3px solid transparent; border-radius:10px; }
-  .logo-option:hover img { border-color:#fff; }
-  
-  img.logo { width:200px; margin:20px auto; display:block; }
-  label, select, button { font-size:18px; }
-  select, button { padding:12px; width:100%; margin-top:15px; border:2px solid #fff; background:rgba(255,255,255,0.15); color:#fff; border-radius:5px; backdrop-filter:blur(10px); }
-  button { cursor:pointer; background:rgba(255,255,255,0.9); color:#9b4dca; font-weight:bold; }
-  button:disabled { opacity:0.5; cursor:not-allowed; }
-  
-  .question { font-size:20px; margin-top:40px; margin-bottom:5px; text-align:left; }
-  .stars { display:flex; gap:10px; margin-bottom:10px; }
-  .star { 
-    font-size:36px; cursor:pointer; color:#444; transition:0.2s; 
-    display:inline-block; pointer-events:auto; user-select:none;
-  }
-  .star.selected { color:gold; }
-  textarea { width:100%; min-height:50px; background:rgba(255,255,255,0.15); color:#fff; padding:8px; border-radius:5px; border:2px solid rgba(255,255,255,0.3); margin-bottom:20px; backdrop-filter:blur(10px); }
-  textarea::placeholder { color:rgba(255,255,255,0.7); }
-  
-  #submitBtn { margin-top:30px; display:none; }
-  #thankYouMessage { 
-    display:none; 
-    margin-top:40px; 
-    padding:30px; 
-    background:rgba(255,255,255,0.2); 
-    border-radius:10px; 
-    font-size:24px; 
-    font-weight:bold;
-    backdrop-filter:blur(10px);
-    border:2px solid rgba(255,255,255,0.3);
-  }
-  #errorMessage {
-    display:none;
-    margin-top:20px;
-    padding:20px;
-    background:rgba(255,100,100,0.3);
-    border-radius:10px;
-    font-size:18px;
-    backdrop-filter:blur(10px);
-    border:2px solid rgba(255,100,100,0.5);
-  }
-  
-  /* Kids Mode Styles */
-  body.kids-mode select,
-  body.kids-mode button { border-color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.15); color:#fff; }
-  body.kids-mode button { background:rgba(255,255,255,0.9); color:#e91e8c; }
-  body.kids-mode textarea { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.3); }
-  body.kids-mode .star { color:#ddd; }
-  body.kids-mode .star.selected { color:#fff200; }
-  body.kids-mode #thankYouMessage { background:rgba(255,255,255,0.2); color:#fff; }
-  body.kids-mode .logo-option:hover img { border-color:#fff; }
-  
-  .back-button { 
-    background:rgba(255,255,255,0.2); 
-    color:#fff; 
-    padding:10px 20px; 
-    border:2px solid rgba(255,255,255,0.3); 
-    border-radius:5px; 
-    cursor:pointer; 
-    margin-bottom:20px; 
-    width:auto;
-    display:inline-block;
-    backdrop-filter:blur(10px);
-  }
-  body.kids-mode .back-button { background:rgba(255,255,255,0.2); border-color:rgba(255,255,255,0.3); }
+body { 
+  font-family: Arial, sans-serif; 
+  background: linear-gradient(135deg, #e91e8c 0%, #9b4dca 50%, #4a90e2 100%); 
+  color: #fff; 
+  margin: 0; 
+  padding: 0; 
+  text-align: center; 
+  min-height: 100vh;
+}
+
+body.kids-mode { 
+  background: linear-gradient(135deg, #f06292 0%, #ba68c8 50%, #42a5f5 100%);
+  color: #fff; 
+}
+
+.container { max-width: 700px; margin: 0 auto; padding: 20px; }
+
+/* Logo Selection Page */
+.logo-selection { display: flex; gap: 30px; justify-content: center; align-items: center; margin: 40px 0; flex-wrap: wrap; }
+.logo-option { cursor: pointer; transition: transform 0.3s, opacity 0.3s; }
+.logo-option:hover { transform: scale(1.1); opacity: 0.9; }
+.logo-option img { width: 250px; border: 3px solid transparent; border-radius: 10px; }
+.logo-option:hover img { border-color: #fff; }
+
+img.logo { width: 200px; margin: 20px auto; display: block; }
+label, select, button { font-size: 18px; font-weight: bold; }
+
+/* Dropdown (select) - Button Style */
+select {
+  padding: 12px;
+  width: 100%;
+  margin-top: 15px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.9);
+  color: #9b4dca;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: left;
+  backdrop-filter: blur(10px);
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+select:hover, select:focus {
+  background: rgba(255,255,255,1);
+  border-color: #fff;
+  outline: none;
+}
+
+body.kids-mode select {
+  background: rgba(255,255,255,0.9);
+  color: #e91e8c;
+  border-color: #e91e8c;
+}
+
+body.kids-mode select:hover, body.kids-mode select:focus {
+  background: #fff;
+  border-color: #e91e8c;
+}
+
+/* Buttons */
+button {
+  padding: 12px;
+  width: 100%;
+  margin-top: 15px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  backdrop-filter: blur(10px);
+  transition: background 0.3s, color 0.3s;
+}
+
+button#continueBtn,
+button#submitBtn {
+  background: #fff;
+  color: #9b4dca;
+}
+
+button#continueBtn:hover,
+button#submitBtn:hover {
+  background: #f0f0f0;
+}
+
+body.kids-mode button#continueBtn,
+body.kids-mode button#submitBtn {
+  background: #fff;
+  color: #e91e8c;
+}
+
+body.kids-mode button#continueBtn:hover,
+body.kids-mode button#submitBtn:hover {
+  background: #ffe0f0;
+}
+
+/* Back Button */
+.back-button { 
+  background: rgba(255,255,255,0.6); 
+  color: #000; 
+  padding: 10px 20px; 
+  border: 2px solid rgba(255,255,255,0.8); 
+  border-radius: 5px; 
+  cursor: pointer; 
+  margin-bottom: 20px; 
+  width: auto;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  font-weight: bold;
+}
+
+body.kids-mode .back-button {
+  background: #fff;
+  color: #e91e8c;
+  border-color: #e91e8c;
+}
+
+body.kids-mode .back-button:hover {
+  background: #ffe0f0;
+}
+
+/* Questions and stars */
+.question { font-size: 20px; margin-top: 40px; margin-bottom: 5px; text-align: left; }
+.stars { display: flex; gap: 10px; margin-bottom: 10px; }
+.star { font-size: 36px; cursor: pointer; color: #444; transition: 0.2s; display: inline-block; pointer-events: auto; user-select: none; }
+.star.selected { color: gold; }
+
+textarea {
+  width: 100%;
+  min-height: 50px;
+  background: rgba(255,255,255,0.25);
+  color: #000;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid rgba(255,255,255,0.5);
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  font-weight: bold;
+}
+
+textarea::placeholder { color: rgba(0,0,0,0.6); }
+
+body.kids-mode textarea {
+  background: rgba(255,255,255,0.35);
+  color: #000;
+  border-color: #fff;
+}
+
+body.kids-mode .star { color: #444; }
+body.kids-mode .star.selected { color: #fff200; }
+
+#thankYouMessage {
+  display: none;
+  margin-top: 40px;
+  padding: 30px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.6);
+  color: #000;
+}
+
+body.kids-mode #thankYouMessage {
+  background: #fff;
+  color: #e91e8c;
+}
+
+#errorMessage {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255,100,100,0.5);
+  border-radius: 10px;
+  font-size: 18px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,50,50,0.8);
+  color: #000;
+}
 </style>
 </head>
 
@@ -145,183 +244,181 @@
 </div>
 
 <script>
-  const questionsAdults = [
-    "Wie zufrieden bist du mit dem Kursangebot?",
-    "Wie kompetent wirken die Trainer*innen auf dich?",
-    "Wie wohl fühlst du dich beim Training?",
-    "Wie gut ist die Trainingsfläche ausgestattet?",
-    "Wie gefallen dir die Öffnungszeiten?",
-    "Wie gut kommst du mit dem Unterrichtstempo klar?",
-    "Wie hilfreich ist das Feedback der Trainer*innen?",
-    "Wie zufrieden bist du mit den angebotenen Nahrungsergänzungsmitteln?",
-    "Wie zufrieden bist du mit der Sauberkeit der Trainingsfläche/Kursräumen?",
-    "Wie wahrscheinlich empfiehlst du uns weiter?"
-  ];
+const questionsAdults = [
+  "Wie zufrieden bist du mit dem Kursangebot?",
+  "Wie kompetent wirken die Trainer*innen auf dich?",
+  "Wie wohl fühlst du dich beim Training?",
+  "Wie gut ist die Trainingsfläche ausgestattet?",
+  "Wie gefallen dir die Öffnungszeiten?",
+  "Wie gut kommst du mit dem Unterrichtstempo klar?",
+  "Wie hilfreich ist das Feedback der Trainer*innen?",
+  "Wie zufrieden bist du mit den angebotenen Nahrungsergänzungsmitteln?",
+  "Wie zufrieden bist du mit der Sauberkeit der Trainingsfläche/Kursräumen?",
+  "Wie wahrscheinlich empfiehlst du uns weiter?"
+];
 
-  const questionsKids = [
-    "Wie viel Spaß macht dir das Training?",
-    "Wie nett sind deine Trainer*innen?",
-    "Fühlst du dich bei uns sicher und wohl?",
-    "Gefallen dir die Übungen und Spiele?",
-    "Lernst du viel Neues beim Training?",
-    "Wie gut gefällt dir die Turnhalle/der Trainingsraum?",
-    "Freust du dich auf das Training?",
-    "Hast du Freunde beim Training gefunden?",
-    "Helfen dir die Trainer*innen, wenn du Hilfe brauchst?",
-    "Würdest du ON STAGE deinen Freunden empfehlen?"
-  ];
+const questionsKids = [
+  "Wie viel Spaß macht dir das Training?",
+  "Wie nett sind deine Trainer*innen?",
+  "Fühlst du dich bei uns sicher und wohl?",
+  "Gefallen dir die Übungen und Spiele?",
+  "Lernst du viel Neues beim Training?",
+  "Wie gut gefällt dir die Turnhalle/der Trainingsraum?",
+  "Freust du dich auf das Training?",
+  "Hast du Freunde beim Training gefunden?",
+  "Helfen dir die Trainer*innen, wenn du Hilfe brauchst?",
+  "Würdest du ON STAGE deinen Freunden empfehlen?"
+];
 
-  const ratingLabels = ["Sehr unzufrieden", "Unzufrieden", "Zufrieden", "Sehr zufrieden"];
-  let selectedLocation = "";
-  const selectedRatings = {};
-  let currentMode = "";
-  let currentQuestions = [];
+const ratingLabels = ["Sehr unzufrieden", "Unzufrieden", "Zufrieden", "Sehr zufrieden"];
+let selectedLocation = "";
+const selectedRatings = {};
+let currentMode = "";
+let currentQuestions = [];
 
-  function selectMode(mode) {
-    currentMode = mode;
-    currentQuestions = mode === 'kids' ? questionsKids : questionsAdults;
-    
-    document.getElementById("logoSelection").style.display = "none";
-    document.getElementById("feedbackSection").style.display = "block";
-    
-    if (mode === 'kids') {
-      document.body.classList.add('kids-mode');
-      document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png";
-      document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Kids";
-    } else {
-      document.body.classList.remove('kids-mode');
-      document.getElementById("selectedLogo").src = "https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo.png";
-      document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Training Center";
-    }
-    
-    // Reset form
-    document.getElementById("location").value = "";
-    document.getElementById("location").disabled = false;
-    document.getElementById("feedbackForm").style.display = "none";
-    document.getElementById("feedbackForm").innerHTML = "";
-    document.getElementById("submitBtn").style.display = "none";
-    document.getElementById("thankYouMessage").style.display = "none";
-    document.getElementById("errorMessage").style.display = "none";
-    
-    // Show continue button if it was removed
-    if (!document.getElementById("continueBtn")) {
-      const btn = document.createElement("button");
-      btn.id = "continueBtn";
-      btn.textContent = "Weiter";
-      btn.onclick = startFeedback;
-      document.getElementById("location").after(btn);
-    } else {
-      document.getElementById("continueBtn").style.display = "inline-block";
-    }
-  }
-
-  function goBack() {
-    document.getElementById("feedbackSection").style.display = "none";
-    document.getElementById("logoSelection").style.display = "block";
+function selectMode(mode) {
+  currentMode = mode;
+  currentQuestions = mode === 'kids' ? questionsKids : questionsAdults;
+  
+  document.getElementById("logoSelection").style.display = "none";
+  document.getElementById("feedbackSection").style.display = "block";
+  
+  if (mode === 'kids') {
+    document.body.classList.add('kids-mode');
+    document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png";
+    document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Kids";
+  } else {
     document.body.classList.remove('kids-mode');
-    
-    // Reset all states
-    selectedLocation = "";
-    Object.keys(selectedRatings).forEach(key => delete selectedRatings[key]);
-    currentMode = "";
-    currentQuestions = [];
+    document.getElementById("selectedLogo").src = "https://github.com/JSTSSTN/mitglieder_feedback_tool/blob/main/Images/logo_neu.png";
+    document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Training Center";
+  }
+  
+  // Reset form
+  document.getElementById("location").value = "";
+  document.getElementById("location").disabled = false;
+  document.getElementById("feedbackForm").style.display = "none";
+  document.getElementById("feedbackForm").innerHTML = "";
+  document.getElementById("submitBtn").style.display = "none";
+  document.getElementById("thankYouMessage").style.display = "none";
+  document.getElementById("errorMessage").style.display = "none";
+  
+  if (!document.getElementById("continueBtn")) {
+    const btn = document.createElement("button");
+    btn.id = "continueBtn";
+    btn.textContent = "Weiter";
+    btn.onclick = startFeedback;
+    document.getElementById("location").after(btn);
+  } else {
+    document.getElementById("continueBtn").style.display = "inline-block";
+  }
+}
+
+function goBack() {
+  document.getElementById("feedbackSection").style.display = "none";
+  document.getElementById("logoSelection").style.display = "block";
+  document.body.classList.remove('kids-mode');
+  
+  selectedLocation = "";
+  Object.keys(selectedRatings).forEach(key => delete selectedRatings[key]);
+  currentMode = "";
+  currentQuestions = [];
+}
+
+function startFeedback() {
+  selectedLocation = document.getElementById("location").value;
+  if (!selectedLocation) {
+    alert("Bitte Standort auswählen!");
+    return;
   }
 
-  function startFeedback() {
-    selectedLocation = document.getElementById("location").value;
-    if (!selectedLocation) {
-      alert("Bitte Standort auswählen!");
+  document.getElementById("continueBtn").style.display = "none";
+  document.getElementById("location").disabled = true;
+
+  const form = document.getElementById("feedbackForm");
+  form.style.display = "block";
+  form.innerHTML = "";
+
+  currentQuestions.forEach((questionText, index) => {
+
+    const qDiv = document.createElement("div");
+    qDiv.classList.add("question");
+    qDiv.textContent = `${index + 1}. ${questionText}`;
+    form.appendChild(qDiv);
+
+    const starsDiv = document.createElement("div");
+    starsDiv.classList.add("stars");
+    starsDiv.id = `stars-${index}`;
+    form.appendChild(starsDiv);
+
+    for (let s = 1; s <= 4; s++) {
+      const star = document.createElement("span");
+      star.classList.add("star");
+      star.innerHTML = "★";
+      star.addEventListener("click", () => selectStars(index, s));
+      starsDiv.appendChild(star);
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.id = `comment-${index}`;
+    textarea.placeholder = currentMode === 'kids' ? "Dein Kommentar (wenn du möchtest)..." : "Dein Kommentar...";
+    form.appendChild(textarea);
+  });
+
+  document.getElementById("submitBtn").style.display = "inline-block";
+}
+
+function selectStars(questionIndex, value) {
+  selectedRatings[questionIndex] = value;
+
+  const stars = document.querySelectorAll(`#stars-${questionIndex} .star`);
+  stars.forEach((star, idx) => {
+    star.classList.toggle("selected", idx < value);
+  });
+}
+
+function submitFeedback() {
+  for (let i = 0; i < currentQuestions.length; i++) {
+    if (!selectedRatings[i]) {
+      alert(`Bitte Frage ${i + 1} bewerten.`);
       return;
     }
-
-    document.getElementById("continueBtn").style.display = "none";
-    document.getElementById("location").disabled = true;
-
-    const form = document.getElementById("feedbackForm");
-    form.style.display = "block";
-    form.innerHTML = "";
-
-    currentQuestions.forEach((questionText, index) => {
-
-      const qDiv = document.createElement("div");
-      qDiv.classList.add("question");
-      qDiv.textContent = `${index + 1}. ${questionText}`;
-      form.appendChild(qDiv);
-
-      const starsDiv = document.createElement("div");
-      starsDiv.classList.add("stars");
-      starsDiv.id = `stars-${index}`;
-      form.appendChild(starsDiv);
-
-      for (let s = 1; s <= 4; s++) {
-        const star = document.createElement("span");
-        star.classList.add("star");
-        star.innerHTML = "★";
-        star.addEventListener("click", () => selectStars(index, s));
-        starsDiv.appendChild(star);
-      }
-
-      const textarea = document.createElement("textarea");
-      textarea.id = `comment-${index}`;
-      textarea.placeholder = currentMode === 'kids' ? "Dein Kommentar (wenn du möchtest)..." : "Dein Kommentar...";
-      form.appendChild(textarea);
-    });
-
-    document.getElementById("submitBtn").style.display = "inline-block";
   }
 
-  function selectStars(questionIndex, value) {
-    selectedRatings[questionIndex] = value;
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Wird gesendet...";
 
-    const stars = document.querySelectorAll(`#stars-${questionIndex} .star`);
-    stars.forEach((star, idx) => {
-      star.classList.toggle("selected", idx < value);
-    });
-  }
+  const payload = {
+    bereich: currentMode === 'kids' ? 'Kids' : 'Erwachsene',
+    standort: selectedLocation,
+    feedback: currentQuestions.map((q, i) => ({
+      frage: q,
+      bewertung: ratingLabels[selectedRatings[i] - 1],
+      kommentar: document.getElementById(`comment-${i}`).value.trim()
+    }))
+  };
 
-  function submitFeedback() {
-    for (let i = 0; i < currentQuestions.length; i++) {
-      if (!selectedRatings[i]) {
-        alert(`Bitte Frage ${i + 1} bewerten.`);
-        return;
-      }
-    }
-
-    const submitBtn = document.getElementById("submitBtn");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Wird gesendet...";
-
-    const payload = {
-      bereich: currentMode === 'kids' ? 'Kids' : 'Erwachsene',
-      standort: selectedLocation,
-      feedback: currentQuestions.map((q, i) => ({
-        frage: q,
-        bewertung: ratingLabels[selectedRatings[i] - 1],
-        kommentar: document.getElementById(`comment-${i}`).value.trim()
-      }))
-    };
-
-    fetch("https://script.google.com/macros/s/AKfycbzEbjJMqX_MpL-kg-BzgjGRH5oO9QrlXXBm0SpS7UTK8UBUWNpd63xACS-Fz4LmZ3iqvQ/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      mode: 'no-cors'
-    })
-    .then(() => {
-      console.log("posted feedbacks")
-      document.getElementById("feedbackForm").style.display = "none";
-      document.getElementById("submitBtn").style.display = "none";
-      document.getElementById("thankYouMessage").style.display = "block";
-    })
-    .catch(err => {
-      console.error(err);
-      const errorMsg = document.getElementById("errorMessage");
-      errorMsg.textContent = "Verbindungsfehler! Bitte versuche es erneut oder kontaktiere uns.";
-      errorMsg.style.display = "block";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Feedback abschicken";
-    });
-  }
+  fetch("https://script.google.com/macros/s/AKfycbzEbjJMqX_MpL-kg-BzgjGRH5oO9QrlXXBm0SpS7UTK8UBUWNpd63xACS-Fz4LmZ3iqvQ/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+    mode: 'no-cors'
+  })
+  .then(() => {
+    console.log("posted feedbacks")
+    document.getElementById("feedbackForm").style.display = "none";
+    document.getElementById("submitBtn").style.display = "none";
+    document.getElementById("thankYouMessage").style.display = "block";
+  })
+  .catch(err => {
+    console.error(err);
+    const errorMsg = document.getElementById("errorMessage");
+    errorMsg.textContent = "Verbindungsfehler! Bitte versuche es erneut oder kontaktiere uns.";
+    errorMsg.style.display = "block";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Feedback abschicken";
+  });
+}
 </script>
 
 </body>
