@@ -6,13 +6,34 @@
 <title>ON STAGE Training Center – Feedback</title>
 
 <style>
-  body { font-family: Arial, sans-serif; background:#000; color:#fff; margin:0; padding:0; text-align:center; }
+  body { 
+    font-family: Arial, sans-serif; 
+    background: linear-gradient(135deg, #e91e8c 0%, #9b4dca 50%, #4a90e2 100%); 
+    color:#fff; 
+    margin:0; 
+    padding:0; 
+    text-align:center; 
+    min-height:100vh;
+  }
+  body.kids-mode { 
+    background: linear-gradient(135deg, #e91e8c 0%, #9b4dca 50%, #4a90e2 100%); 
+    color:#fff; 
+  }
   .container { max-width:700px; margin:0 auto; padding:20px; }
+  
+  /* Logo Selection Page */
+  .logo-selection { display:flex; gap:30px; justify-content:center; align-items:center; margin:40px 0; flex-wrap:wrap; }
+  .logo-option { cursor:pointer; transition:transform 0.3s, opacity 0.3s; }
+  .logo-option:hover { transform:scale(1.1); opacity:0.8; }
+  .logo-option img { width:250px; border:3px solid transparent; border-radius:10px; }
+  .logo-option:hover img { border-color:#fff; }
+  
   img.logo { width:200px; margin:20px auto; display:block; }
   label, select, button { font-size:18px; }
-  select, button { padding:12px; width:100%; margin-top:15px; border:2px solid #fff; background:#111; color:#fff; border-radius:5px; }
-  button { cursor:pointer; background:#fff; color:#000; font-weight:bold; }
+  select, button { padding:12px; width:100%; margin-top:15px; border:2px solid #fff; background:rgba(255,255,255,0.15); color:#fff; border-radius:5px; backdrop-filter:blur(10px); }
+  button { cursor:pointer; background:rgba(255,255,255,0.9); color:#9b4dca; font-weight:bold; }
   button:disabled { opacity:0.5; cursor:not-allowed; }
+  
   .question { font-size:20px; margin-top:40px; margin-bottom:5px; text-align:left; }
   .stars { display:flex; gap:10px; margin-bottom:10px; }
   .star { 
@@ -20,59 +41,111 @@
     display:inline-block; pointer-events:auto; user-select:none;
   }
   .star.selected { color:gold; }
-  textarea { width:100%; min-height:50px; background:#111; color:#fff; padding:8px; border-radius:5px; border:2px solid #444; margin-bottom:20px; }
+  textarea { width:100%; min-height:50px; background:rgba(255,255,255,0.15); color:#fff; padding:8px; border-radius:5px; border:2px solid rgba(255,255,255,0.3); margin-bottom:20px; backdrop-filter:blur(10px); }
+  textarea::placeholder { color:rgba(255,255,255,0.7); }
+  
   #submitBtn { margin-top:30px; display:none; }
   #thankYouMessage { 
     display:none; 
     margin-top:40px; 
     padding:30px; 
-    background:#1a5f1a; 
+    background:rgba(255,255,255,0.2); 
     border-radius:10px; 
     font-size:24px; 
     font-weight:bold;
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(255,255,255,0.3);
   }
   #errorMessage {
     display:none;
     margin-top:20px;
     padding:20px;
-    background:#8b0000;
+    background:rgba(255,100,100,0.3);
     border-radius:10px;
     font-size:18px;
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(255,100,100,0.5);
   }
+  
+  /* Kids Mode Styles */
+  body.kids-mode select,
+  body.kids-mode button { border-color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.15); color:#fff; }
+  body.kids-mode button { background:rgba(255,255,255,0.9); color:#e91e8c; }
+  body.kids-mode textarea { background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.3); }
+  body.kids-mode .star { color:#ddd; }
+  body.kids-mode .star.selected { color:#fff200; }
+  body.kids-mode #thankYouMessage { background:rgba(255,255,255,0.2); color:#fff; }
+  body.kids-mode .logo-option:hover img { border-color:#fff; }
+  
+  .back-button { 
+    background:rgba(255,255,255,0.2); 
+    color:#fff; 
+    padding:10px 20px; 
+    border:2px solid rgba(255,255,255,0.3); 
+    border-radius:5px; 
+    cursor:pointer; 
+    margin-bottom:20px; 
+    width:auto;
+    display:inline-block;
+    backdrop-filter:blur(10px);
+  }
+  body.kids-mode .back-button { background:rgba(255,255,255,0.2); border-color:rgba(255,255,255,0.3); }
 </style>
 </head>
 
 <body>
 <div class="container">
 
-  <img class="logo" src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo.png">
-
-  <h2>Feedback – ON STAGE Training Center</h2>
-
-  <label for="location"><b>Bitte Standort auswählen</b></label>
-  <select id="location">
-    <option value="" disabled selected>Standort wählen</option>
-    <option value="Am Felde">Am Felde</option>
-    <option value="Krohnskamp">Krohnskamp</option>
-    <option value="Conventstraße">Conventstraße</option>
-  </select>
-
-  <button id="continueBtn" onclick="startFeedback()">Weiter</button>
-
-  <form id="feedbackForm" style="display:none; margin-top:20px;"></form>
-
-  <button id="submitBtn" onclick="submitFeedback()">Feedback abschicken</button>
-  
-  <div id="thankYouMessage">
-    ✓ Vielen Dank für dein Feedback!
+  <!-- Logo Selection Page -->
+  <div id="logoSelection">
+    <h1>Willkommen beim ON STAGE Feedback</h1>
+    <p style="font-size:18px; margin:20px 0;">Bitte wähle deinen Bereich:</p>
+    
+    <div class="logo-selection">
+      <div class="logo-option" onclick="selectMode('adults')">
+        <img src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo.png" alt="Erwachsene">
+        <p style="font-size:20px; font-weight:bold; margin-top:10px;">Erwachsene</p>
+      </div>
+      
+      <div class="logo-option" onclick="selectMode('kids')">
+        <img src="https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png" alt="Kids">
+        <p style="font-size:20px; font-weight:bold; margin-top:10px;">Kids</p>
+      </div>
+    </div>
   </div>
 
-  <div id="errorMessage"></div>
+  <!-- Feedback Section -->
+  <div id="feedbackSection" style="display:none;">
+    <button class="back-button" onclick="goBack()">← Zurück zur Auswahl</button>
+    
+    <img class="logo" id="selectedLogo" src="">
+    <h2 id="feedbackTitle">Feedback – ON STAGE Training Center</h2>
+
+    <label for="location"><b>Bitte Standort auswählen</b></label>
+    <select id="location">
+      <option value="" disabled selected>Standort wählen</option>
+      <option value="Am Felde">Am Felde</option>
+      <option value="Krohnskamp">Krohnskamp</option>
+      <option value="Conventstraße">Conventstraße</option>
+    </select>
+
+    <button id="continueBtn" onclick="startFeedback()">Weiter</button>
+
+    <form id="feedbackForm" style="display:none; margin-top:20px;"></form>
+
+    <button id="submitBtn" onclick="submitFeedback()">Feedback abschicken</button>
+    
+    <div id="thankYouMessage">
+      ✓ Vielen Dank für dein Feedback!
+    </div>
+
+    <div id="errorMessage"></div>
+  </div>
 
 </div>
 
 <script>
-  const questions = [
+  const questionsAdults = [
     "Wie zufrieden bist du mit dem Kursangebot?",
     "Wie kompetent wirken die Trainer*innen auf dich?",
     "Wie wohl fühlst du dich beim Training?",
@@ -85,9 +158,74 @@
     "Wie wahrscheinlich empfiehlst du uns weiter?"
   ];
 
+  const questionsKids = [
+    "Wie viel Spaß macht dir das Training?",
+    "Wie nett sind deine Trainer*innen?",
+    "Fühlst du dich bei uns sicher und wohl?",
+    "Gefallen dir die Übungen und Spiele?",
+    "Lernst du viel Neues beim Training?",
+    "Wie gut gefällt dir die Turnhalle/der Trainingsraum?",
+    "Freust du dich auf das Training?",
+    "Hast du Freunde beim Training gefunden?",
+    "Helfen dir die Trainer*innen, wenn du Hilfe brauchst?",
+    "Würdest du ON STAGE deinen Freunden empfehlen?"
+  ];
+
   const ratingLabels = ["Sehr unzufrieden", "Unzufrieden", "Zufrieden", "Sehr zufrieden"];
   let selectedLocation = "";
   const selectedRatings = {};
+  let currentMode = "";
+  let currentQuestions = [];
+
+  function selectMode(mode) {
+    currentMode = mode;
+    currentQuestions = mode === 'kids' ? questionsKids : questionsAdults;
+    
+    document.getElementById("logoSelection").style.display = "none";
+    document.getElementById("feedbackSection").style.display = "block";
+    
+    if (mode === 'kids') {
+      document.body.classList.add('kids-mode');
+      document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png";
+      document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Kids";
+    } else {
+      document.body.classList.remove('kids-mode');
+      document.getElementById("selectedLogo").src = "https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo.png";
+      document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Training Center";
+    }
+    
+    // Reset form
+    document.getElementById("location").value = "";
+    document.getElementById("location").disabled = false;
+    document.getElementById("feedbackForm").style.display = "none";
+    document.getElementById("feedbackForm").innerHTML = "";
+    document.getElementById("submitBtn").style.display = "none";
+    document.getElementById("thankYouMessage").style.display = "none";
+    document.getElementById("errorMessage").style.display = "none";
+    
+    // Show continue button if it was removed
+    if (!document.getElementById("continueBtn")) {
+      const btn = document.createElement("button");
+      btn.id = "continueBtn";
+      btn.textContent = "Weiter";
+      btn.onclick = startFeedback;
+      document.getElementById("location").after(btn);
+    } else {
+      document.getElementById("continueBtn").style.display = "inline-block";
+    }
+  }
+
+  function goBack() {
+    document.getElementById("feedbackSection").style.display = "none";
+    document.getElementById("logoSelection").style.display = "block";
+    document.body.classList.remove('kids-mode');
+    
+    // Reset all states
+    selectedLocation = "";
+    Object.keys(selectedRatings).forEach(key => delete selectedRatings[key]);
+    currentMode = "";
+    currentQuestions = [];
+  }
 
   function startFeedback() {
     selectedLocation = document.getElementById("location").value;
@@ -96,14 +234,14 @@
       return;
     }
 
-    document.getElementById("continueBtn").remove();
+    document.getElementById("continueBtn").style.display = "none";
     document.getElementById("location").disabled = true;
 
     const form = document.getElementById("feedbackForm");
     form.style.display = "block";
     form.innerHTML = "";
 
-    questions.forEach((questionText, index) => {
+    currentQuestions.forEach((questionText, index) => {
 
       const qDiv = document.createElement("div");
       qDiv.classList.add("question");
@@ -125,7 +263,7 @@
 
       const textarea = document.createElement("textarea");
       textarea.id = `comment-${index}`;
-      textarea.placeholder = "Dein Kommentar...";
+      textarea.placeholder = currentMode === 'kids' ? "Dein Kommentar (wenn du möchtest)..." : "Dein Kommentar...";
       form.appendChild(textarea);
     });
 
@@ -142,7 +280,7 @@
   }
 
   function submitFeedback() {
-    for (let i = 0; i < questions.length; i++) {
+    for (let i = 0; i < currentQuestions.length; i++) {
       if (!selectedRatings[i]) {
         alert(`Bitte Frage ${i + 1} bewerten.`);
         return;
@@ -154,8 +292,9 @@
     submitBtn.textContent = "Wird gesendet...";
 
     const payload = {
+      bereich: currentMode === 'kids' ? 'Kids' : 'Erwachsene',
       standort: selectedLocation,
-      feedback: questions.map((q, i) => ({
+      feedback: currentQuestions.map((q, i) => ({
         frage: q,
         bewertung: ratingLabels[selectedRatings[i] - 1],
         kommentar: document.getElementById(`comment-${i}`).value.trim()
