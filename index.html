@@ -61,13 +61,13 @@ select:hover, select:focus {
 
 body.kids-mode select {
   background: rgba(255,255,255,0.9);
-  color: #e91e8c;
-  border-color: #e91e8c;
+  color: #9b4dca;
+  border-color: #9b4dca;
 }
 
 body.kids-mode select:hover, body.kids-mode select:focus {
   background: #fff;
-  border-color: #e91e8c;
+  border-color: #9b4dca;
 }
 
 /* Buttons */
@@ -97,20 +97,25 @@ button#submitBtn:hover {
 body.kids-mode button#continueBtn,
 body.kids-mode button#submitBtn {
   background: #fff;
-  color: #e91e8c;
+  color: #9b4dca;
 }
 
 body.kids-mode button#continueBtn:hover,
 body.kids-mode button#submitBtn:hover {
-  background: #ffe0f0;
+  background: #f0f0f0;
+}
+
+button:disabled { 
+  opacity: 0.5; 
+  cursor: not-allowed; 
 }
 
 /* Back Button */
 .back-button { 
   background: rgba(255,255,255,0.6); 
-  color: #000; 
+  color: #9b4dca; 
   padding: 10px 20px; 
-  border: 2px solid rgba(255,255,255,0.8); 
+  border: 2px solid #9b4dca; 
   border-radius: 5px; 
   cursor: pointer; 
   margin-bottom: 20px; 
@@ -118,16 +123,21 @@ body.kids-mode button#submitBtn:hover {
   display: inline-block;
   backdrop-filter: blur(10px);
   font-weight: bold;
+  transition: background 0.3s;
+}
+
+.back-button:hover {
+  background: rgba(255,255,255,0.8);
 }
 
 body.kids-mode .back-button {
-  background: #fff;
-  color: #e91e8c;
-  border-color: #e91e8c;
+  background: rgba(255,255,255,0.6);
+  color: #9b4dca;
+  border-color: #9b4dca;
 }
 
 body.kids-mode .back-button:hover {
-  background: #ffe0f0;
+  background: rgba(255,255,255,0.8);
 }
 
 /* Questions and stars */
@@ -159,6 +169,11 @@ body.kids-mode textarea {
 
 body.kids-mode .star { color: #444; }
 body.kids-mode .star.selected { color: #fff200; }
+
+#submitBtn { 
+  margin-top: 30px; 
+  display: none; 
+}
 
 #thankYouMessage {
   display: none;
@@ -202,12 +217,12 @@ body.kids-mode #thankYouMessage {
     
     <div class="logo-selection">
       <div class="logo-option" onclick="selectMode('adults')">
-        <img src="https://github.com/JSTSSTN/mitglieder_feedback_tool/blob/main/Images/logo_neu.png" alt="Erwachsene">
+        <img src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_neu.png" alt="Erwachsene">
         <p style="font-size:20px; font-weight:bold; margin-top:10px;">Erwachsene</p>
       </div>
       
       <div class="logo-option" onclick="selectMode('kids')">
-        <img src="https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png" alt="Kids">
+        <img src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_kids.png" alt="Kids">
         <p style="font-size:20px; font-weight:bold; margin-top:10px;">Kids</p>
       </div>
     </div>
@@ -285,11 +300,11 @@ function selectMode(mode) {
   
   if (mode === 'kids') {
     document.body.classList.add('kids-mode');
-    document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png";
+    document.getElementById("selectedLogo").src = "https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_kids.png";
     document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Kids";
   } else {
     document.body.classList.remove('kids-mode');
-    document.getElementById("selectedLogo").src = "https://github.com/JSTSSTN/mitglieder_feedback_tool/blob/main/Images/logo_neu.png";
+    document.getElementById("selectedLogo").src = "https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_neu.png";
     document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Training Center";
   }
   
