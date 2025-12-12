@@ -25,9 +25,10 @@ body.kids-mode {
 
 /* Logo Selection Page */
 .logo-selection { display: flex; gap: 30px; justify-content: center; align-items: center; margin: 40px 0; flex-wrap: wrap; }
-.logo-option { cursor: pointer; transition: transform 0.3s, opacity 0.3s; }
+.logo-option { cursor: pointer; transition: transform 0.3s, opacity 0.3s; width: 250px; height: 250px; }
 .logo-option:hover { transform: scale(1.1); opacity: 0.9; }
-.logo-option img { width: 250px; height: 250px; object-fit: contain; border: 3px solid transparent; border-radius: 10px; }
+.logo-option img { width: 100%; height: 100%; object-fit: cover; border: 3px solid transparent; border-radius: 10px; }
+.logo-option.adults-logo img { object-fit: contain; }
 .logo-option:hover img { border-color: #fff; }
 
 img.logo { width: 250px; height: 250px; object-fit: contain; margin: 20px auto; display: block; border-radius: 10px; }
@@ -262,7 +263,7 @@ body.kids-mode .rating-legend {
     <p style="font-size:18px; margin:20px 0;">Bitte wähle deinen Bereich:</p>
     
     <div class="logo-selection">
-      <div class="logo-option" onclick="selectMode('adults')">
+      <div class="logo-option adults-logo" onclick="selectMode('adults')">
         <img src="https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_neu.png" alt="Erwachsene">
         <p style="font-size:20px; font-weight:bold; margin-top:10px;">Erwachsene</p>
       </div>
