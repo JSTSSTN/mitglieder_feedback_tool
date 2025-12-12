@@ -38,7 +38,7 @@ select {
   padding: 12px;
   width: 100%;
   margin-top: 15px;
-  border: 2px solid #fff;
+  border: 2px solid #9b4dca;
   border-radius: 5px;
   background: rgba(255,255,255,0.9);
   color: #9b4dca;
@@ -55,7 +55,7 @@ select {
 
 select:hover, select:focus {
   background: rgba(255,255,255,1);
-  border-color: #fff;
+  border-color: #9b4dca;
   outline: none;
 }
 
@@ -217,12 +217,12 @@ body.kids-mode #thankYouMessage {
     
     <div class="logo-selection">
       <div class="logo-option" onclick="selectMode('adults')">
-        <img src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_neu.png" alt="Erwachsene">
+        <img src="https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_neu.png" alt="Erwachsene">
         <p style="font-size:20px; font-weight:bold; margin-top:10px;">Erwachsene</p>
       </div>
       
       <div class="logo-option" onclick="selectMode('kids')">
-        <img src="https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_kids.png" alt="Kids">
+        <img src="https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png" alt="Kids">
         <p style="font-size:20px; font-weight:bold; margin-top:10px;">Kids</p>
       </div>
     </div>
@@ -300,11 +300,11 @@ function selectMode(mode) {
   
   if (mode === 'kids') {
     document.body.classList.add('kids-mode');
-    document.getElementById("selectedLogo").src = "https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_kids.png";
+    document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png";
     document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Kids";
   } else {
     document.body.classList.remove('kids-mode');
-    document.getElementById("selectedLogo").src = "https://jstsstn.github.io/mitglieder_feedback_tool/Images/logo_neu.png";
+    document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_neu.png";
     document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Training Center";
   }
   
