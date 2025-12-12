@@ -28,10 +28,11 @@ body.kids-mode {
 .logo-option { cursor: pointer; transition: transform 0.3s, opacity 0.3s; width: 250px; height: 250px; }
 .logo-option:hover { transform: scale(1.1); opacity: 0.9; }
 .logo-option img { width: 100%; height: 100%; object-fit: cover; border: 3px solid transparent; border-radius: 10px; }
-.logo-option.adults-logo img { object-fit: contain; }
+.logo-option.adults-logo img { object-fit: fill; }
 .logo-option:hover img { border-color: #fff; }
 
-img.logo { width: 250px; height: 250px; object-fit: contain; margin: 20px auto; display: block; border-radius: 10px; }
+img.logo { width: 250px; height: 250px; object-fit: cover; margin: 20px auto; display: block; border-radius: 10px; }
+img.logo.adults-logo { object-fit: fill; }
 label, select, button { font-size: 18px; font-weight: bold; }
 
 /* Dropdown (select) - Button Style */
@@ -383,11 +384,15 @@ function selectMode(mode) {
   
   if (mode === 'kids') {
     document.body.classList.add('kids-mode');
-    document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png";
+    const logo = document.getElementById("selectedLogo");
+    logo.src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_kids.png";
+    logo.classList.remove('adults-logo');
     document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Kids";
   } else {
     document.body.classList.remove('kids-mode');
-    document.getElementById("selectedLogo").src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_neu.png";
+    const logo = document.getElementById("selectedLogo");
+    logo.src = "https://raw.githubusercontent.com/JSTSSTN/mitglieder_feedback_tool/main/Images/logo_neu.png";
+    logo.classList.add('adults-logo');
     document.getElementById("feedbackTitle").textContent = "Feedback – ON STAGE Training Center";
   }
   
