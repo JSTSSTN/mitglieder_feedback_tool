@@ -27,10 +27,10 @@ body.kids-mode {
 .logo-selection { display: flex; gap: 30px; justify-content: center; align-items: center; margin: 40px 0; flex-wrap: wrap; }
 .logo-option { cursor: pointer; transition: transform 0.3s, opacity 0.3s; }
 .logo-option:hover { transform: scale(1.1); opacity: 0.9; }
-.logo-option img { width: 250px; height: 250px; object-fit: cover; border: 3px solid transparent; border-radius: 10px; }
+.logo-option img { width: 250px; height: 250px; object-fit: contain; border: 3px solid transparent; border-radius: 10px; }
 .logo-option:hover img { border-color: #fff; }
 
-img.logo { width: 200px; height: 200px; object-fit: contain; margin: 20px auto; display: block; }
+img.logo { width: 250px; height: 250px; object-fit: contain; margin: 20px auto; display: block; border-radius: 10px; }
 label, select, button { font-size: 18px; font-weight: bold; }
 
 /* Dropdown (select) - Button Style */
@@ -204,6 +204,52 @@ body.kids-mode #thankYouMessage {
   border: 2px solid rgba(255,50,50,0.8);
   color: #000;
 }
+
+/* Rating Legend */
+.rating-legend {
+  display: none;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin: 30px 0;
+  backdrop-filter: blur(10px);
+}
+
+.rating-legend h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  text-align: center;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  gap: 10px;
+}
+
+.legend-stars {
+  display: flex;
+  gap: 3px;
+  min-width: 120px;
+}
+
+.legend-star {
+  font-size: 20px;
+  color: gold;
+}
+
+body.kids-mode .rating-legend {
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.5);
+}
 </style>
 </head>
 
@@ -244,6 +290,42 @@ body.kids-mode #thankYouMessage {
     </select>
 
     <button id="continueBtn" onclick="startFeedback()">Weiter</button>
+
+    <div class="rating-legend" id="ratingLegend">
+      <h3>Bewertungs-Legende</h3>
+      <div class="legend-items">
+        <div class="legend-item">
+          <div class="legend-stars">
+            <span class="legend-star">★</span>
+          </div>
+          <span>= Sehr unzufrieden</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-stars">
+            <span class="legend-star">★</span>
+            <span class="legend-star">★</span>
+          </div>
+          <span>= Unzufrieden</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-stars">
+            <span class="legend-star">★</span>
+            <span class="legend-star">★</span>
+            <span class="legend-star">★</span>
+          </div>
+          <span>= Zufrieden</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-stars">
+            <span class="legend-star">★</span>
+            <span class="legend-star">★</span>
+            <span class="legend-star">★</span>
+            <span class="legend-star">★</span>
+          </div>
+          <span>= Sehr zufrieden</span>
+        </div>
+      </div>
+    </div>
 
     <form id="feedbackForm" style="display:none; margin-top:20px;"></form>
 
@@ -316,6 +398,7 @@ function selectMode(mode) {
   document.getElementById("submitBtn").style.display = "none";
   document.getElementById("thankYouMessage").style.display = "none";
   document.getElementById("errorMessage").style.display = "none";
+  document.getElementById("ratingLegend").style.display = "none";
   
   if (!document.getElementById("continueBtn")) {
     const btn = document.createElement("button");
@@ -348,6 +431,7 @@ function startFeedback() {
 
   document.getElementById("continueBtn").style.display = "none";
   document.getElementById("location").disabled = true;
+  document.getElementById("ratingLegend").style.display = "block";
 
   const form = document.getElementById("feedbackForm");
   form.style.display = "block";
